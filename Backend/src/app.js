@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 
+import notificationRoutes from "./routes/notification.routes.js"
 import connectToDB from "./database/mongodb.js";
 
 const app = express();
@@ -20,6 +21,8 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Welcome to the Server API");
 });
+
+app.use("/api/notification", notificationRoutes);
 
 app.listen(PORT, async () => {
   await connectToDB();
