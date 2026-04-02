@@ -23,6 +23,10 @@ const App = () => {
 
     onMessageListener().then((payload) => {
       console.log("Notification received: ", payload);
+      if (Notification.permission === "granted") {
+        const { title, body, image } = payload.notification;
+        new Notification(title, { body, icon: image });
+      }
     });
   }, []);
   return (

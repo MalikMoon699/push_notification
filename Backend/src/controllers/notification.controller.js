@@ -16,8 +16,6 @@ export const getFcmTokken = async (req, res) => {
 
 export const sendNotification = async (req, res) => {
   const { title, body, fcmToken, icon } = req.body;
-  console.log("req.body----->", req.body);
-
   if (!fcmToken)
     return res.status(400).json({ error: "FCM token is required" });
 
