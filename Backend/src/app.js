@@ -5,7 +5,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 
-import notificationRoutes from "./routes/notification.routes.js"
+import sdkRoutes from "./routes/sdk.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 import connectToDB from "./database/mongodb.js";
 
 const app = express();
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Server API");
 });
 
+app.use("/api/sdk", sdkRoutes);
 app.use("/api/notification", notificationRoutes);
 
 app.listen(PORT, async () => {
