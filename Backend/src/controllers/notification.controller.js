@@ -16,27 +16,29 @@ export const getFcmTokken = async (req, res) => {
 
 export const sendNotification = async (req, res) => {
   const { title, body, fcmTokens, icon } = req.body;
-  if (!fcmTokens || !fcmTokens.length)
+
+  if (!fcmTokens || fcmTokens.length === 0) {
     return res.status(400).json({ error: "FCM tokens are required" });
+  }
+
   try {
-    const message = {
-      notification: { title, body, image: icon },
-      tokens: fcmTokens,
-    };
+    const results = await Promise.all(
+      fcmTokens.map((token) =>
+        admin
+          .messaging()
+          .send({
+            token,
+            notification: { title, body, image: icon },
+          })
+          .catch((err) => ({ error: err.message })),
+      ),
+    );
 
-    const response = await admin.messaging().sendMulticast(message);
-    console.log("Firebase response:", response);
+    const successCount = results.filter((r) => !r.error).length;
+    const failureCount = results.filter((r) => r.error).length;
 
-    res.status(200).json({
-      success: true,
-      response: {
-        successCount: response.successCount,
-        failureCount: response.failureCount,
-        responses: response.responses,
-      },
-    });
+    res.json({ success: true, successCount, failureCount, results });
   } catch (err) {
-    console.error("Error sending notification:", err);
-    res.status(500).json({ error: err.message, stack: err.stack });
+    res.status(500).json({ error: err.message });
   }
 };
