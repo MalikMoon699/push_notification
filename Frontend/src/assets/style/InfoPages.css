@@ -1,0 +1,342 @@
+.about-page {
+  padding: 80px 20px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.about-page-header {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.about-page-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.about-page-subtitle {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+/* Intro */
+.about-page-intro {
+  max-width: 800px;
+  margin: 0 auto 70px;
+  text-align: center;
+}
+
+.about-page-text {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--secondary-foreground);
+}
+
+/* Mission & Vision */
+.about-page-mission-vision {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto 80px;
+}
+
+.about-page-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+}
+
+.about-page-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.about-page-card-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+
+/* Why Choose Us */
+.about-page-why {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-page-section-title {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.about-page-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.about-page-feature {
+  background-color: var(--secondary);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.about-page-feature-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.about-page-feature-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* =========================
+   Contact Page
+========================= */
+.contact-page {
+  padding: 80px 20px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.contact-page-header {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.contact-page-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.contact-page-subtitle {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.contact-page-content {
+  max-width: 1000px;
+  margin: 0 auto 70px;
+  text-align: center;
+}
+
+.contact-page-text {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--secondary-foreground);
+}
+
+.contact-page-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 50px auto 0;
+}
+
+.contact-page-info-item {
+  background-color: var(--primary-hover);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+}
+
+.contact-page-info-item h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.contact-page-info-item p {
+  font-size: 15px;
+  color: var(--muted-foreground);
+}
+
+/* =========================
+   Careers Page
+========================= */
+.careers-page {
+  padding: 80px 20px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.careers-page-header {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.careers-page-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.careers-page-subtitle {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.careers-page-content {
+  max-width: 1000px;
+  margin: 0 auto 70px;
+  text-align: center;
+}
+
+.careers-page-text {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--secondary-foreground);
+}
+
+.careers-page-roles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 50px auto 0;
+}
+
+.careers-page-role:nth-child(4) {
+  grid-column: 2 / 3;
+}
+.careers-page-role {
+  background-color: var(--primary-hover);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+}
+
+.careers-page-role h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.careers-page-role p {
+  font-size: 15px;
+  color: var(--muted-foreground);
+}
+
+/* =========================
+   Privacy Policy Page
+========================= */
+.privacy-page {
+  padding: 80px 20px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.privacy-page-header {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.privacy-page-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.privacy-page-subtitle {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.privacy-page-content {
+  max-width: 800px;
+  margin: 0 auto 70px;
+}
+
+.privacy-page-text {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--secondary-foreground);
+  margin-bottom: 20px;
+}
+
+/* =========================
+   Terms of Service Page
+========================= */
+.terms-page {
+  padding: 80px 20px;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.terms-page-header {
+  max-width: 900px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.terms-page-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.terms-page-subtitle {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.terms-page-content {
+  max-width: 800px;
+  margin: 0 auto 70px;
+}
+
+.terms-page-text {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--secondary-foreground);
+  margin-bottom: 20px;
+}
+
+/* ============ landing-page-services ============  */
+
+.landing-page-services {
+  padding: 40px 20px;
+  min-height: 65vh;
+}
+
+.landing-page-services-grid {
+  max-width: 1400px;
+  margin: 50px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* ============ landing-page-doctors ============  */
+
+.landing-page-doctor-grid {
+  max-width: 1400px;
+  margin: 20px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+/*  */

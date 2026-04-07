@@ -1,0 +1,163 @@
+/* =========== custom code container =========== */
+.custom-code-container {
+  background: var(--background);
+  border-radius: 12px;
+  overflow: hidden;
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+}
+
+.custom-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--card);
+}
+
+.custom-code-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-code-header-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.custom-code-header-indicators {
+  display: flex;
+  gap: 5px;
+}
+
+.custom-code-header-indicators {
+  width: 40px;
+  height: 10px;
+  position: relative;
+}
+
+.custom-code-header-indicators span {
+  width: 10px;
+  height: 10px;
+  background: #4ade80;
+  border-radius: 50%;
+}
+
+.custom-code-header-indicators span:nth-child(1) {
+  background: #f87171;
+}
+.custom-code-header-indicators span:nth-child(2) {
+  background: #facc15;
+}
+
+.custom-code-body {
+  padding: 20px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  color: var(--muted-foreground);
+}
+
+.custom-code-header-copy-btn {
+  color: var(--card-foreground);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-code-header-copy-btn .icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.custom-code-header-copy-btn svg {
+  position: absolute;
+  top: -17px;
+  right: -3px;
+  transition: 0.3s;
+}
+
+.icon-copy {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.icon-check {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.icon.active .icon-copy {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.icon.active .icon-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* =========== custom Input =========== */
+.custom-input-label {
+  font-size: 13px;
+  margin-top: 10px;
+  display: block;
+}
+
+.custom-input,
+.custom-textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  outline: 0;
+  transition: 0.3s;
+}
+
+.custom-input:focus,
+.custom-textarea:focus {
+  border-color: var(--primary);
+  color: var(--card-foreground);
+}
+
+.custom-input-icon:focus-within > svg {
+  color: var(--primary);
+}
+
+.custom-textarea {
+  height: 200px;
+  resize: none;
+}
+
+.custom-input-icon {
+  position: relative;
+}
+
+.custom-input-icon > svg {
+  position: absolute;
+  top: 17px;
+  left: 10px;
+  font-size: 0px;
+  color: var(--muted-foreground);
+  transition: 0.3s;
+}
+
+.custom-input-icon > .custom-input {
+  padding-left: 32px;
+  padding-right: 24px;
+}
+
+.custom-password-toggel {
+  position: absolute;
+  top: 17px;
+  right: 10px;
+  font-size: 0px;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

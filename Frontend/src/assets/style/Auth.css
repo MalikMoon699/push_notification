@@ -1,0 +1,8 @@
+.form-card {
+  background: var(--card);
+  box-shadow: 0px 0px 8px var(--shadow);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 7px;
+  overflow: auto;
+}
