@@ -2,7 +2,6 @@ import React from "react";
 import {
   Sparkles,
   Shield,
-  Star,
   ArrowRight,
   Key,
   Code2,
@@ -33,8 +32,8 @@ export const LandingPage = () => {
 
           <h1 className="landing-page-hero-title">
             Send Notifications{" "}
-            <span className="landing-page-text-primary"> in Seconds</span> for
-            Your App
+            <span className="landing-page-text-primary">Instantly</span> with
+            Dev Push Notification
           </h1>
           <p className="landing-page-hero-subtitle">
             The simplest API for push notifications. Built for developers, loved
@@ -162,18 +161,17 @@ export const LandingPage = () => {
         <div className="landing-use-code-demo-right">
           <CustomCodeSection
             Title="notification.js"
-            codeBody={`import { DNPClient } from 'dnp-sdk';
+            codeBody={`import { sendNotification } from "dev-push-notification";
 
-
-const client = new DNPClient('your-api-key');
-
+const API_KEY = "YOUR_API_KEY_HERE";
 
 // Send a push notification
-await client.send({
-  token: 'device-token-here',
-  title: 'Hello World! 🚀',
+await sendNotification({
+  apiKey: API_KEY,
+  title: 'Hello World!',
   body: 'Your first push notification',
-  data: { url: '/dashboard' }
+  icon: "https://dev-push-notification.vercel.app/SiteIcon.png",
+  fcmTokens: [token],
 });`}
           />
         </div>

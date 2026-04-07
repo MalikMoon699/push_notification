@@ -140,6 +140,10 @@
   color: var(--primary-foreground);
 }
 
+.landing-page-btn-secondary:hover > svg {
+  transform: translateX(3px);
+}
+
 .landing-page-hero {
   padding: 5rem 1rem;
   text-align: center;
