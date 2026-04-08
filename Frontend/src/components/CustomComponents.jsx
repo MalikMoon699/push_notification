@@ -9,6 +9,7 @@ import {
   Minus,
   Plus,
   X,
+  Zap,
 } from "lucide-react";
 import { IMAGES } from "../utils/constants";
 import Loader from "./Loader";
@@ -351,11 +352,11 @@ export const TopBar = ({ title = "", updateCredits = null }) => {
 
   const colorSuggestion = () => {
     if (creadit < 10) {
-      return "red";
+      return "var(--status-rejected)";
     } else if (creadit < 50) {
-      return "orange";
+      return "var(--status-pending)";
     } else {
-      return "green";
+      return "var(--primary)";
     }
   };
 
@@ -370,7 +371,7 @@ export const TopBar = ({ title = "", updateCredits = null }) => {
             style={{ color: colorSuggestion() }}
           >
             <span className="icon">
-              <CirclePoundSterling fill="#f8a314" color="#f7d028" />
+              <Zap size={16}/>
             </span>
             {creadit} credits
           </h4>

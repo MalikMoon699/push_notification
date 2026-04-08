@@ -74,16 +74,17 @@
 }
 
 .sidebar-menu {
-  padding: 16px 0px;
+  padding: 16px 6px;
   flex: 1;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  margin-bottom: 6px;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  margin-bottom: 7px;
   cursor: pointer;
   color: var(--card-foreground);
   transition: background 0.2s ease;
@@ -99,16 +100,6 @@
   position: relative;
 }
 
-.sidebar-item-active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0px;
-  bottom: 0px;
-  width: 4px;
-  background-color: var(--primary);
-  border-radius: 0 8px 8px 0;
-}
 
 .sidebar-icon {
   width: 20px;
@@ -147,7 +138,7 @@
 
 .sidebar-logout-btn:hover {
   gap: 12px;
-  background-color: var(--status-approved);
+  background-color: var(--primary-dark-hover);
 }
 
 @media (max-width: 768px) {

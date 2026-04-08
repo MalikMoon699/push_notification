@@ -79,7 +79,7 @@ const SideBar = () => {
                   isActive(item) ? "sidebar-item-active" : ""
                 }`}
               >
-                <Icon size={26} />
+                <Icon size={20} />
                 <span className="sidebar-label">{item.name}</span>
               </div>
             );

@@ -14,6 +14,7 @@ import LandingPrivacy from "./pages/Landing/LandingPrivacy.jsx";
 import LandingTerms from "./pages/Landing/LandingTerms.jsx";
 import AppLayout from "./layout/AppLayout.jsx";
 import DashBoard from "./pages/DashBoard.jsx";
+import Analytics from "./pages/Analytics.jsx";
 import APISection from "./pages/APISection.jsx";
 import Usage from "./pages/Usage.jsx";
 import Rewards from "./pages/Rewards.jsx";
@@ -48,6 +49,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <DashBoard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
               </ProtectedRoute>
             }
           />

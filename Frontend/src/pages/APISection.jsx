@@ -1,7 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/style/APISection.css";
 import { Key, Eye, Copy, Trash2, EyeOff } from "lucide-react";
-import { Input, TopBar } from "../components/CustomComponents";
+import {
+  CustomCodeSection,
+  Input,
+  TopBar,
+} from "../components/CustomComponents";
 import { toast } from "sonner";
 import {
   deleteApiKeys,
@@ -11,7 +15,7 @@ import {
   getApiUsageByMonth,
 } from "../services/key.services";
 import Loader from "../components/Loader";
-import { formateDate, handleCopy, timeAgo } from "../utils/helper";
+import { formateDate, timeAgo } from "../utils/helper";
 
 const APISection = () => {
   const [isGen, setIsGen] = useState(false);
@@ -19,7 +23,7 @@ const APISection = () => {
   const [monthUsage, setMonthUsage] = useState(0);
   const [apiKeys, setApiKeys] = useState([]);
   const [loading, setLoading] = useState(true);
-  const codeRef = useRef();
+  const [keyUsage, setKeyUsage] = useState([]);
 
   useEffect(() => {
     fetchAllData();
@@ -70,6 +74,21 @@ const APISection = () => {
 
         <div className="api-keys-section">
           <div className="api-keys-header">
+            <h3>Usage by Key (This Week)</h3>
+          </div>
+          {loading ? (
+            <Loader style={{ height: "200px" }} />
+          ) : keyUsage?.length > 0 ? (
+            keyUsage.map((key, index) => (
+             <div>here add chart</div>
+            ))
+          ) : (
+            <p className="empty-data">No Keys usage found.</p>
+          )}
+        </div>
+
+        <div className="api-keys-section">
+          <div className="api-keys-header">
             <h3>API Keys</h3>
             <button onClick={() => setIsGen(true)} className="api-generate-btn">
               <Key size={16} />
@@ -99,50 +118,40 @@ const APISection = () => {
         <div className="api-quickstart">
           <div className="api-quickstart-header">
             <h3>Quick Start</h3>
-            <button
-              onClick={() => handleCopy(codeRef.current.innerText)}
-              className="api-copy-code"
-            >
-              <span className="icon">
-                <Copy size={15} />
-              </span>
-              Copy
-            </button>
           </div>
+          <CustomCodeSection
+            Title="Usage"
+            codeBody={`import { getToken, sendNotification } from "dev-push-notification";
 
-          <pre className="api-code" ref={codeRef}>
-            {`
-import axios from "axios";
+const API_KEY = "YOUR_API_KEY_HERE";
 
+// get token
+const token = await getToken(API_KEY);
+console.log("Device Token:", token);
 
-export const uploadByApi = async (files) => {
-  if (!files || files.length === 0) throw new Error("No files selected");
-  else if (files.length > 5)
-    throw new Error("maximum 5 files upload at a time.");
-  const formData = new FormData();
-  files.forEach((item) => {
-    formData.append("files", item.file);
-  });
+// send notification
+await sendNotification({
+  apiKey: API_KEY,
+  title: "Hello",
+  body: "This is a test push notification",
+  icon: "https://example.com/icon.png",
+  fcmTokens: [token],
+});
 
-  try {
-    const res = await axios.post(
-      "http://localhost:3000/api/v1/key/upload-media",
-      formData,
-      {
-        headers: {
-          apikey: "md_sk_a••••••••••••••••", // pass your apikey
-        },
-      },
-    );
-
-    return res.data; // { message, files, creditsUsed, remainingCredits }
-  } catch (err) {
-    console.error("Upload API error:", err.response?.data || err.message);
-    throw err.response?.data || err;
-  }
-};
+// Response
+{
+  "success": true,
+  "successCount": 2,
+  "failureCount": 1,
+  "results": [
+    "message-id-1",
+    "message-id-2",
+    { "error": "Invalid registration token" }
+  ]
+}
 `}
-          </pre>
+            style={{ marginTop: "10px" }}
+          />
         </div>
         {isGen && (
           <GenerateApiKey
@@ -253,7 +262,7 @@ const GenerateApiKey = ({ onClose, setApiKeys }) => {
     try {
       setLoading(true);
       const res = await genApiKey(keyName);
-      setApiKeys((prev) => [res?.apiKey,...prev]);
+      setApiKeys((prev) => [res?.apiKey, ...prev]);
       toast.success("Api key gen successfuly.");
     } catch (err) {
       console.error("Failed to gen api key:", err);

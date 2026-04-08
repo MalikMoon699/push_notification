@@ -16,10 +16,16 @@ export const SideBarMenu = [
     activeAt: "/dashboard",
   },
   {
-    name: "Usage",
+    name: "Analytics",
     icon: "ChartNoAxesCombined",
-    route: "/usage",
-    activeAt: "/usage",
+    route: "/analytics",
+    activeAt: "/analytics",
+  },
+  {
+    name: "API Section",
+    icon: "Key",
+    route: "/api-section",
+    activeAt: "/api-section",
   },
   {
     name: "Rewards",
@@ -28,10 +34,10 @@ export const SideBarMenu = [
     activeAt: "/rewards",
   },
   {
-    name: "API Section",
-    icon: "Key",
-    route: "/api-section",
-    activeAt: "/api-section",
+    name: "Usage",
+    icon: "Activity",
+    route: "/usage",
+    activeAt: "/usage",
   },
   {
     name: "Payments",

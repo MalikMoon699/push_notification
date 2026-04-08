@@ -17,6 +17,11 @@ const userSchema = new Schema(
       required: true,
       select: false,
     },
+    accountType: {
+      type: String,
+      enum: ["basicUser", "premiumUser"],
+      default: "basicUser",
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
