@@ -1,3 +1,4 @@
+import { PORT } from "./config/env.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -19,15 +20,16 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the Server API");
-});
-
 app.use("/api/auth", authRoute);
 app.use("/api/v1/key", keyRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/sdk", sdkRoutes);
 app.use("/api/notification", notificationRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the Server API");
+});
+
 
 app.listen(PORT, async () => {
   await connectToDB();
@@ -35,4 +37,3 @@ app.listen(PORT, async () => {
 });
 
 export default app;
-
