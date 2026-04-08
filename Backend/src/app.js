@@ -23,12 +23,6 @@ app.use(
   }),
 );
 app.options("*", cors());
-app.use(
-  cors({
-    origin: (origin, callback) => callback(null, origin),
-    credentials: true,
-  }),
-);
 app.use(morgan("dev"));
 
 app.use(express.json({ limit: "10mb" }));
