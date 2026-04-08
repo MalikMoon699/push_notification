@@ -1,6 +1,5 @@
 import admin from "../utils/firebaseAdmin.js";
-import User from "../models/user.model.js";
-import ApiKey from "../models/apiKey.model.js";
+import { logApiUsage } from "../services/logApiUsage.js";
 
 export const getFcmTokken = async (req, res) => {
   try {
@@ -48,18 +47,24 @@ export const sendNotification = async (req, res) => {
 export const getFcmTokkenByCredits = async (req, res) => {
   try {
     const { token } = req.body;
-    const userId = req.user?.id;
+    const user = req.user;
+    const apiKey = req.apiKey;
 
     if (!token) {
       return res.status(400).json({ error: "Token is required" });
     }
 
-    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
     if (user.accountType === "premiumUser") {
+      await logApiUsage({
+        apiKeyId: apiKey._id,
+        userId: user._id,
+        useCase: "Device token generated",
+        success: true,
+      });
       return res.json({
         success: true,
         token,
@@ -69,16 +74,28 @@ export const getFcmTokkenByCredits = async (req, res) => {
     }
 
     if (user.credits <= 0) {
+      await logApiUsage({
+        apiKeyId: apiKey._id,
+        userId: user._id,
+        useCase: "Not enough credits to generate device token",
+        success: false,
+      });
+
       return res.status(403).json({
         success: false,
-        message: "Not enough credits to get token",
-        upgradeUrl: "https://dev-push-notification.vercel.app/princing",
+        message: "Not enough credits",
       });
     }
 
     user.credits -= 1;
     await user.save();
 
+    await logApiUsage({
+      apiKeyId: apiKey._id,
+      userId: user._id,
+      useCase: "Device token generated",
+      success: true,
+    });
     return res.json({
       success: true,
       token,
@@ -86,22 +103,34 @@ export const getFcmTokkenByCredits = async (req, res) => {
       remainingCredits: user.credits,
     });
   } catch (err) {
-    console.error("Failed to get FCM Token:", err);
+    await logApiUsage({
+      apiKeyId: req.apiKey?._id,
+      userId: req.user?._id,
+      useCase: "Error while generating device token",
+      success: false,
+    });
+    console.error("Failed:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 export const sendNotificationByCredits = async (req, res) => {
   const { title, body, fcmTokens, icon } = req.body;
-  const userId = req.user?.id;
+  const user = req.user;
+  const apiKey = req.apiKey;
 
   if (!fcmTokens || fcmTokens.length === 0) {
-    return res.status(400).json({ error: "FCM tokens are required" });
+    await logApiUsage({
+      apiKeyId: apiKey?._id,
+      userId: user?._id,
+      useCase: "FCM tokens missing",
+      success: false,
+    });
+
+    return res.status(400).json({ error: "FCM tokens required" });
   }
 
   try {
-    const user = await User.findById(userId);
-
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -111,10 +140,16 @@ export const sendNotificationByCredits = async (req, res) => {
 
     if (user.accountType === "basicUser") {
       if (user.credits <= 0) {
+        await logApiUsage({
+          apiKeyId: apiKey._id,
+          userId: user._id,
+          useCase: "Not enough credits to send notification",
+          success: false,
+        });
+
         return res.status(403).json({
           success: false,
           message: "No credits available",
-          upgradeUrl: "https://dev-push-notification.vercel.app/princing",
         });
       }
 
@@ -127,11 +162,7 @@ export const sendNotificationByCredits = async (req, res) => {
           .messaging()
           .send({
             token,
-            notification: {
-              title,
-              body,
-              image: icon,
-            },
+            notification: { title, body, image: icon },
           })
           .then(() => ({ success: true }))
           .catch((err) => ({ error: err.message })),
@@ -145,10 +176,16 @@ export const sendNotificationByCredits = async (req, res) => {
 
     if (user.accountType === "basicUser") {
       creditsUsed = successCount;
-
       user.credits -= creditsUsed;
       await user.save();
     }
+
+    await logApiUsage({
+      apiKeyId: apiKey._id,
+      userId: user._id,
+      useCase: `Notification sent: ${successCount} success, ${failureCount} failed`,
+      success: successCount > 0,
+    });
 
     return res.json({
       success: true,
@@ -159,13 +196,16 @@ export const sendNotificationByCredits = async (req, res) => {
       creditsUsed,
       remainingCredits:
         user.accountType === "basicUser" ? user.credits : "unlimited",
-      note:
-        uniqueTokens.length > tokensToSend.length
-          ? "Some tokens were skipped due to low credits"
-          : null,
       results,
     });
   } catch (err) {
+    await logApiUsage({
+      apiKeyId: apiKey?._id,
+      userId: user?._id,
+      useCase: "Error while sending notification",
+      success: false,
+    });
+
     console.error("Notification Error:", err);
     res.status(500).json({ error: err.message });
   }

@@ -1,6 +1,5 @@
 import ApiKey from "../models/apiKey.model.js";
 import KeyUsage from "../models/apiUsage.model.js";
-import User from "../models/user.model.js";
 import mongoose from "mongoose";
 import crypto from "crypto";
 
@@ -15,7 +14,7 @@ export const genApiKey = async (req, res) => {
 
     while (!isUnique) {
       const randomPart = crypto.randomBytes(10).toString("hex").slice(0, 18);
-      newKey = `md_sk_${randomPart}`;
+      newKey = `dpn_sk_${randomPart}`;
 
       const existing = await ApiKey.findOne({ key: newKey });
       if (!existing) isUnique = true;
@@ -52,98 +51,6 @@ export const getApiKeys = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// export const uploadMediaByApiKeys = async (req, res) => {
-//   try {
-//     const { apikey } = req.headers;
-//     if (!apikey) {
-//       return res.status(400).json({ message: "API key required" });
-//     }
-//     const key = await ApiKey.findOne({ key: apikey });
-//     if (!key) return res.status(404).json({ message: "Invalid API key" });
-
-//     const user = await User.findById(key.createdBy);
-//     if (!user) return res.status(404).json({ message: "User not found" });
-
-//     if (!req.files || req.files.length === 0) {
-//       return res.status(400).json({ message: "No files uploaded" });
-//     }
-//     let totalCreditsRequired = 0;
-//     req.files.forEach((file) => {
-//       const sizeInMB = file.size / (1024 * 1024);
-//       totalCreditsRequired += Math.ceil(sizeInMB) * 2;
-//     });
-
-//     if (user.credits < totalCreditsRequired) {
-//       return res.status(400).json({
-//         message: `${totalCreditsRequired} credits required`,
-//         requiredCredits: totalCreditsRequired,
-//         availableCredits: user.credits,
-//       });
-//     }
-
-//     const bucket = getBucket();
-//     const uploadedFiles = [];
-
-//     await Promise.all(
-//       req.files.map(
-//         (file) =>
-//           new Promise((resolve, reject) => {
-//             const readableStream = Readable.from(file.buffer);
-//             const uploadStream = bucket.openUploadStream(file.originalname, {
-//               contentType: file.mimetype,
-//             });
-
-//             readableStream.pipe(uploadStream);
-
-//             uploadStream.on("finish", async () => {
-//               const newMedia = await Media.create({
-//                 filename: file.originalname,
-//                 contentType: file.mimetype,
-//                 size: file.size,
-//                 gridfsId: uploadStream.id,
-//                 uploadBy: user._id,
-//               });
-
-//               uploadedFiles.push({
-//                 ...newMedia.toObject(),
-//                 fileId: newMedia._id,
-//                 fileUrl: `${Backend_Url}/api/media/get-media/${newMedia._id}`,
-//                 uploadedAt: newMedia.createdAt,
-//               });
-
-//               resolve();
-//             });
-
-//             uploadStream.on("error", reject);
-//           }),
-//       ),
-//     );
-
-//     user.credits -= totalCreditsRequired;
-//     await user.save();
-
-//     const today = new Date().toISOString().split("T")[0];
-//     await KeyUsage.findOneAndUpdate(
-//       { apiKey: key._id, user: user._id, date: today },
-//       { $inc: { calls: req.files.length } },
-//       { upsert: true },
-//     );
-//     key.keyCalles += req.files.length;
-//     key.lastUsed = new Date();
-//     await key.save();
-
-//     res.status(201).json({
-//       message: "Files uploaded successfully",
-//       files: uploadedFiles,
-//       creditsUsed: totalCreditsRequired,
-//       remainingCredits: user.credits,
-//     });
-//   } catch (error) {
-//     console.error("Upload error:", error);
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 export const deleteApiKey = async (req, res) => {
   try {

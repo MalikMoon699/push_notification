@@ -137,10 +137,10 @@ const SignIn = () => {
       </div>
       <div className="auth-right">
         <div className="auth-right-content">
-          <h1>Your Media, Securely Stored</h1>
+          <h1>Powerful Push Notifications Made Simple</h1>
           <p>
-            Store, manage, and access your files, images, and media anytime,
-            anywhere — all in one secure place.
+            Send, manage, and track real-time notifications effortlessly — all
+            from one centralized platform built for developers.
           </p>
         </div>
       </div>
