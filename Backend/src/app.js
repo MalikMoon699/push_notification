@@ -44,9 +44,17 @@ app.use("/api/payment", paymentRoute);
 app.use("/api/sdk", sdkRoutes);
 app.use("/api/notification", notificationRoutes);
 
-app.listen(PORT, async () => {
-  await connectToDB();
-  console.log(`Server is running on http://localhost:${PORT}`);
+// app.listen(PORT, async () => {
+//   await connectToDB();
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.message);
+  res.status(500).json({
+    success: false,
+    message: "Internal Server Error",
+  });
 });
 
 export default app;
