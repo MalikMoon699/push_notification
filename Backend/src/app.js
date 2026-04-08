@@ -15,22 +15,20 @@ import connectToDB from "./database/mongodb.js";
 const app = express();
 connectToDB();
 
-app.use(cors());
 app.use(
   cors({
-    origin: "https://dev-push-notification.vercel.app",
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+app.options("*", cors());
+app.use(
+  cors({
+    origin: (origin, callback) => callback(null, origin),
     credentials: true,
   }),
 );
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      callback(null, true);
-    },
-    credentials: true,
-  }),
-);
-
 app.use(morgan("dev"));
 
 app.use(express.json({ limit: "10mb" }));
