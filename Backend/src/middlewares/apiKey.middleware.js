@@ -1,6 +1,5 @@
 // middlewares/apiKey.middleware.js
 import ApiKey from "../models/apiKey.model.js";
-import User from "../models/user.model.js";
 
 export const verifyApiKey = async (req, res, next) => {
   try {

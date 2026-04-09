@@ -9,6 +9,8 @@ import keyRoute from "./routes/apiKey.routes.js";
 import paymentRoute from "./routes/payment.routes.js";
 import sdkRoutes from "./routes/sdk.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
+import usageRoutes from "./routes/usage.routes.js";
+import rewardsRoutes from "./routes/reward.routes.js";
 import connectToDB from "./database/mongodb.js";
 
 const app = express();
@@ -25,6 +27,8 @@ app.use("/api/v1/key", keyRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/sdk", sdkRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/usage", usageRoutes);
+app.use("/api/rewards", rewardsRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Server API");

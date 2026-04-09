@@ -27,6 +27,8 @@ const userSchema = new Schema(
       enum: ["pending", "approved", "rejected"],
       default: "approved",
     },
+    firstSignUpClaim: { type: Boolean, default: false },
+    lastClaimDate: { type: Date },
     credits: {
       type: Number,
       default: 0,

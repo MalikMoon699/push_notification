@@ -1,10 +1,14 @@
 import React from "react";
+import { TopBar } from "../components/CustomComponents";
 
 const Analytics = () => {
   return (
-    <div>
-      <div>Analytics</div>
-    </div>
+    <>
+      <TopBar title="Analytics" />
+      <div>
+        <div>Analytics</div>
+      </div>
+    </>
   );
 };
 

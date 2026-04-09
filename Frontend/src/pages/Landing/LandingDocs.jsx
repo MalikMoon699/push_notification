@@ -194,8 +194,6 @@ messaging.onBackgroundMessage(function (payload) {
   initMessaging(API_KEY);
 
   const unsubscribe = onMessageListener((payload) => {
-    console.log("Notification received:", payload);
-
     if (Notification.permission === "granted" && payload.notification) {
       const { title, body, image } = payload.notification;
 

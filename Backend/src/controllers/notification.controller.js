@@ -62,7 +62,8 @@ export const getFcmTokkenByCredits = async (req, res) => {
       await logApiUsage({
         apiKeyId: apiKey._id,
         userId: user._id,
-        useCase: "Device token generated",
+        title:"generate token",
+        useCase: `Device token generated: ${token}`,
         success: true,
       });
       return res.json({
@@ -77,13 +78,14 @@ export const getFcmTokkenByCredits = async (req, res) => {
       await logApiUsage({
         apiKeyId: apiKey._id,
         userId: user._id,
+        title: "generate token",
         useCase: "Not enough credits to generate device token",
         success: false,
       });
 
       return res.status(403).json({
         success: false,
-        message: "Not enough credits",
+        message: "Not enough credits to generate device token",
       });
     }
 
@@ -93,7 +95,8 @@ export const getFcmTokkenByCredits = async (req, res) => {
     await logApiUsage({
       apiKeyId: apiKey._id,
       userId: user._id,
-      useCase: "Device token generated",
+      title: "generate token",
+      useCase: `Device token generated: ${token}`,
       success: true,
     });
     return res.json({
@@ -106,6 +109,7 @@ export const getFcmTokkenByCredits = async (req, res) => {
     await logApiUsage({
       apiKeyId: req.apiKey?._id,
       userId: req.user?._id,
+      title: "generate token",
       useCase: "Error while generating device token",
       success: false,
     });
@@ -123,6 +127,7 @@ export const sendNotificationByCredits = async (req, res) => {
     await logApiUsage({
       apiKeyId: apiKey?._id,
       userId: user?._id,
+      title:"send notification",
       useCase: "FCM tokens missing",
       success: false,
     });
@@ -143,13 +148,14 @@ export const sendNotificationByCredits = async (req, res) => {
         await logApiUsage({
           apiKeyId: apiKey._id,
           userId: user._id,
+          title: "send notification",
           useCase: "Not enough credits to send notification",
           success: false,
         });
 
         return res.status(403).json({
           success: false,
-          message: "No credits available",
+          message: "Not enough credits to send notification",
         });
       }
 
@@ -183,6 +189,7 @@ export const sendNotificationByCredits = async (req, res) => {
     await logApiUsage({
       apiKeyId: apiKey._id,
       userId: user._id,
+      title: "send notification",
       useCase: `Notification sent: ${successCount} success, ${failureCount} failed`,
       success: successCount > 0,
     });
@@ -202,6 +209,7 @@ export const sendNotificationByCredits = async (req, res) => {
     await logApiUsage({
       apiKeyId: apiKey?._id,
       userId: user?._id,
+      title: "send notification",
       useCase: "Error while sending notification",
       success: false,
     });

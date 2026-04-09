@@ -81,6 +81,10 @@ const SignIn = () => {
             Don&apos;t have an account?{" "}
             <span onClick={() => navigate("/signUp")} className="auth-link">
               Sign up for free
+            </span>{" "}
+            or{" "}
+            <span onClick={() => navigate("/")} className="auth-link">
+              GoBack
             </span>
           </p>
 

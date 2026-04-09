@@ -11,16 +11,14 @@ import {
   deleteApiKeys,
   genApiKey,
   getApiKeys,
-  getApiUsageByDate,
-  getApiUsageByMonth,
+  getApiUsageStates,
 } from "../services/key.services";
 import Loader from "../components/Loader";
 import { formateDate, timeAgo } from "../utils/helper";
 
 const APISection = () => {
   const [isGen, setIsGen] = useState(false);
-  const [todayUsage, setTodayUsage] = useState(0);
-  const [monthUsage, setMonthUsage] = useState(0);
+  const [usageStates, setUsageStates] = useState(null);
   const [apiKeys, setApiKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [keyUsage, setKeyUsage] = useState([]);
@@ -36,15 +34,13 @@ const APISection = () => {
     try {
       setLoading(true);
 
-      const [keysRes, todayRes, monthRes] = await Promise.all([
+      const [keysRes, statesRes] = await Promise.all([
         getApiKeys(),
-        getApiUsageByDate(today),
-        getApiUsageByMonth(month),
+        getApiUsageStates({ date: today, month }),
       ]);
 
       setApiKeys(keysRes?.keys || []);
-      setTodayUsage(todayRes?.totalCalls || 0);
-      setMonthUsage(monthRes?.totalCalls || 0);
+      setUsageStates(statesRes || 0);
     } catch (err) {
       console.error("Failed to load API data:", err);
     } finally {
@@ -59,14 +55,16 @@ const APISection = () => {
         <div className="api-stats">
           <StateTabs
             title="API Calls Today"
-            value={todayUsage || 0}
-            maxValue={1000}
+            value={usageStates?.today || 0}
+            maxValue={usageStates?.thisMonth}
+            subValue="this month"
             isProgress={true}
           />
           <StateTabs
             title="Monthly Usage"
-            value={monthUsage}
-            maxValue={30000}
+            value={usageStates?.thisMonth}
+            maxValue={usageStates?.total}
+            subValue="total"
             isProgress={true}
           />
           <StateTabs title="Rate Limit" value="100 req" maxValue="min" />
@@ -79,9 +77,7 @@ const APISection = () => {
           {loading ? (
             <Loader style={{ height: "200px" }} />
           ) : keyUsage?.length > 0 ? (
-            keyUsage.map((key, index) => (
-             <div>here add chart</div>
-            ))
+            keyUsage.map((key, index) => <div>here add chart</div>)
           ) : (
             <p className="empty-data">No Keys usage found.</p>
           )}
@@ -171,12 +167,22 @@ const StateTabs = ({
   title = "",
   value = 0,
   maxValue = 0,
+  subValue = "",
 }) => {
   return (
     <div className="api-stat-card">
       <p className="api-stat-title">{title}</p>
       <h2>
-        {value} {maxValue ? `/ ${maxValue}` : ""}
+        {value} {maxValue ? `/ ${maxValue}` : ""}{" "}
+        <span
+          style={{
+            fontSize: "16px",
+            fontWeight: "500",
+            color: "var(--muted-foreground)",
+          }}
+        >
+          {subValue}
+        </span>
       </h2>
       {isProgress && (
         <div className="api-progress">
@@ -200,7 +206,7 @@ const ApiKeyCard = ({
 
   const handleCopy = () => {
     navigator.clipboard.writeText(apiKey);
-    alert("API Key copied to clipboard!");
+    toast.success("API Key copied to clipboard!");
   };
 
   const handleDelete = async () => {

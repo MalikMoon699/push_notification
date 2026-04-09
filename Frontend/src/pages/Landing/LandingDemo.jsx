@@ -20,7 +20,6 @@ const LandingDemo = () => {
   useEffect(() => {
     initMessaging(API_KEY);
     const unsubscribe = onMessageListener((payload) => {
-      console.log("Notification received:", payload);
       if (Notification.permission === "granted" && payload.notification) {
         const { title, body, image } = payload.notification;
         new Notification(title, { body, icon: image });
@@ -36,7 +35,11 @@ const LandingDemo = () => {
     else if (message.trim() === "") return toast.error("Message is required!");
     try {
       setLoading(true);
-      const token = await getToken(API_KEY);
+      const tokenRes = await getToken(API_KEY);
+      if (!tokenRes?.success) {
+        return toast.error(tokenRes?.message || "Something went wrong");
+      }
+      const token = tokenRes.token;
       const res = await sendNotification({
         apiKey: API_KEY,
         title: title,
@@ -44,9 +47,13 @@ const LandingDemo = () => {
         icon: "https://dev-push-notification.vercel.app/SiteIcon.png",
         fcmTokens: [token],
       });
-      console.log("Notification sent response:", res);
+      if (!res?.success) {
+        return toast.error(res?.message || "Something went wrong");
+      }
+      toast.success("Notification sent successfully!");
     } catch (err) {
       console.error("Failed to send notification:", err);
+      toast.error(err?.message || "Failed to send notification");
     } finally {
       setLoading(false);
     }
@@ -57,8 +64,8 @@ const LandingDemo = () => {
       <div className="landing-demo-inner-container">
         <h1>Live Demo</h1>
         <h4>
-          Test the API directly from your browser. Use dpn_ prefix for valid
-          keys.
+          Test the API directly from your browser. Each test requires <b>2 credits</b> (1 for token generation and 1
+          for sending the notification).
         </h4>
         <div className="form-card">
           <Input

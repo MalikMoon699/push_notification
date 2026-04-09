@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
+import { TopBar } from "../components/CustomComponents";
 
 const DashBoard = () => {
   return (
-    <div>
-      <div>DashBoard</div>
-    </div>
+    <>
+      <TopBar title="Dashboard" />
+      <div>
+        <div>DashBoard</div>
+      </div>
+    </>
   );
-}
+};
 
-export default DashBoard
+export default DashBoard;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import "../assets/style/SideBar.css";
 import { IMAGES, SideBarMenu } from "../utils/constants";
@@ -10,6 +10,21 @@ const SideBar = () => {
   const location = useLocation();
   const [isSideBar, setIsSideBar] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
+  const sidebarRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSideBar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsSideBar]);
 
   return (
     <>
@@ -31,27 +46,23 @@ const SideBar = () => {
         </button>
       </div>
       <aside
+        ref={sidebarRef}
         className={`sidebar-container ${!isSideBar ? "sidebar-closed" : ""}`}
       >
         <div className="sidebar-header">
+          <button className="sidebar-go-back-btn" onClick={() => navigate("/")}>
+            <span className="icon">
+              <LucideIcons.ChevronLeft />
+            </span>
+          </button>
           <div className="landing-page-navbar-logo">
             <img
               src={IMAGES.SiteLogo}
               alt="TaskHive Logo"
               className="sidebar-logo"
             />
-            <h3>
-              DPN
-            </h3>
+            <h3>DPN</h3>
           </div>
-          <button
-            className="sidebar-close-btn"
-            onClick={() => {
-              setIsSideBar(false);
-            }}
-          >
-            <LucideIcons.X />
-          </button>
         </div>
 
         <div className="sidebar-divider" />

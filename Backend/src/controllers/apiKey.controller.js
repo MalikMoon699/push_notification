@@ -94,56 +94,73 @@ export const getUserApiUsage = async (req, res) => {
   }
 };
 
-export const getApiUsageByDate = async (req, res) => {
+export const getApiUsageStates = async (req, res) => {
   try {
-    const { date } = req.query;
-    if (!date) return res.status(400).json({ message: "Date is required" });
-    const start = new Date(date);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(date);
-    end.setHours(23, 59, 59, 999);
+    const userId = new mongoose.Types.ObjectId(req.user.id);
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
 
-    const total = await KeyUsage.aggregate([
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const stats = await KeyUsage.aggregate([
       {
         $match: {
-          user: new mongoose.Types.ObjectId(req.user.id),
-          date: { $gte: start, $lte: end },
+          user: userId,
+          // success: true,
         },
       },
-      { $group: { _id: null, totalCalls: { $sum: "$calls" } } },
-    ]);
-
-    res.status(200).json({ totalCalls: total[0]?.totalCalls || 0 });
-  } catch (error) {
-    console.error("Get API usage by date error:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const getApiUsageByMonth = async (req, res) => {
-  try {
-    const { month } = req.query;
-    if (!month) return res.status(400).json({ message: "Month is required" });
-    const [year, mon] = month.split("-").map(Number);
-    if (!year || !mon)
-      return res.status(400).json({ message: "Invalid month format" });
-
-    const start = new Date(year, mon - 1, 1);
-    const end = new Date(year, mon, 1);
-
-    const total = await KeyUsage.aggregate([
       {
-        $match: {
-          user: new mongoose.Types.ObjectId(req.user.id),
-          date: { $gte: start, $lt: end },
+        $group: {
+          _id: null,
+          total: { $sum: "$calls" },
+          today: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $gte: ["$date", todayStart] },
+                    { $lte: ["$date", todayEnd] },
+                  ],
+                },
+                "$calls",
+                0,
+              ],
+            },
+          },
+          thisMonth: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $gte: ["$date", monthStart] },
+                    { $lt: ["$date", monthEnd] },
+                  ],
+                },
+                "$calls",
+                0,
+              ],
+            },
+          },
         },
       },
-      { $group: { _id: null, totalCalls: { $sum: "$calls" } } },
     ]);
 
-    res.status(200).json({ totalCalls: total[0]?.totalCalls || 0 });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    const result = stats[0] || {
+      today: 0,
+      thisMonth: 0,
+      total: 0,
+    };
+
+    return res.status(200).json({
+      today: result.today || 0,
+      thisMonth: result.thisMonth || 0,
+      total: result.total || 0,
+    });
+  } catch (err) {
+    console.error("Get API usage states error:", err);
+    return res.status(500).json({ message: err.message });
   }
 };

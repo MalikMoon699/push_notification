@@ -4,6 +4,7 @@ const usageSchema = new mongoose.Schema(
   {
     apiKey: { type: mongoose.Schema.Types.ObjectId, ref: "Apikey" },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    title: { type: String },
     useCase: { type: String },
     success: { type: Boolean },
     date: { type: Date },
