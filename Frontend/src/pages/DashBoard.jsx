@@ -35,7 +35,7 @@ const DashBoard = () => {
   };
 
   const hourlyChartData =
-    hourlyData?.length === 0 ? hourlyData : DashBoardHourlyFallBack;
+    hourlyData?.length > 0 ? hourlyData : DashBoardHourlyFallBack;
 
   const weeklyChartData =
     weeklyData?.length > 0 ? weeklyData : DashBoardWeeklyFallBack;
