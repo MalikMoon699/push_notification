@@ -433,7 +433,7 @@
 }
 
 .custom-pricing-btn:hover {
-  background: #00c29bc6;
+  background: var(--primary-dark-hover);
 }
 
 /* ============ Load More ============ */

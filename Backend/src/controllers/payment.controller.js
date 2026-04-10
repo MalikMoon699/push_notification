@@ -16,7 +16,7 @@ export const createCheckoutSection = async (req, res) => {
       line_items: [
         {
           price_data: {
-            currency: "eur",
+            currency: "pkr",
             product_data: {
               name: `${credits} Credits`,
             },

@@ -257,8 +257,8 @@ export const ImageViewModel = ({ Image = "", onClose }) => {
 };
 
 const PrincingCard = () => {
-  const [customcredits, setCustomcredits] = useState(500);
-  const [customPrice, setCustomPrice] = useState(0);
+  const [customcredits, setCustomcredits] = useState(3000);
+  const [customPrice, setCustomPrice] = useState(150);
   const [payLoading, setPayLoading] = useState(false);
 
   const handlePayNow = async () => {
@@ -277,13 +277,14 @@ const PrincingCard = () => {
   };
 
   useEffect(() => {
+    if (customcredits < 3001) return;
     const price = getCustomcreditsPrice(customcredits);
     setCustomPrice(price);
   }, [customcredits]);
 
   const getCustomcreditsPrice = (credits = 1) => {
-    const inOneDollar = 0.6;
-    const price = credits * inOneDollar;
+    const pricePerCredit = 1 / 20;
+    const price = credits * pricePerCredit;
     return price.toFixed(2);
   };
 
@@ -300,7 +301,12 @@ const PrincingCard = () => {
       <div style={{ width: "100%" }}>
         <div className="custom-pricing-header">Custom</div>
 
-        <div className="custom-pricing-price">€ {customPrice}</div>
+        <div className="custom-pricing-price">Rs {customPrice}</div>
+        <div style={{ color: "var(--muted-foreground)", fontSize: "12px" }}>
+          Minimum purchase is{" "}
+          <span style={{ color: "var(--card-foreground)" }}> ( Rs:150 ) </span>{" "}
+          required
+        </div>
 
         <div className="custom-pricing-divider" />
 
@@ -310,7 +316,7 @@ const PrincingCard = () => {
         </div>
         <div className="custom-pricing-custom-credits">
           <button
-            disabled={customcredits < 2}
+            disabled={customcredits < 3001}
             onClick={() => handleChangeCreadit("dec")}
           >
             <Minus />
@@ -322,7 +328,7 @@ const PrincingCard = () => {
             min={1}
             onChange={(e) => {
               let value = parseInt(e.target.value, 10);
-              if (e.target.value === "") {
+              if (e.target.value === "" || e.target.value < 3000) {
                 return;
               }
               if (value < 1 || isNaN(value)) value = 1;
@@ -743,9 +749,7 @@ export const StatesCard = ({
           {loading ? <Loader size="25" stroke="2" /> : <>{value}</>}
         </h3>
       </div>
-      <div
-        className="custom-dashboard-stat-icon"
-      >
+      <div className="custom-dashboard-stat-icon">
         <Icon color={iColor} />
       </div>
     </div>
