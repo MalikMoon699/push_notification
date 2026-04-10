@@ -33,7 +33,7 @@ export const createCheckoutSection = async (req, res) => {
       },
 
       success_url: `${FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_URL}/pricing`,
+      cancel_url: `${FRONTEND_URL}/payments`,
     });
 
     await Payment.create({
