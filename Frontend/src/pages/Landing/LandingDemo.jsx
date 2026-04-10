@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "../../components/CustomComponents";
-import { SendHorizontal } from "lucide-react";
+import { Key, SendHorizontal } from "lucide-react";
 import { toast } from "sonner";
 import {
   getToken,
@@ -8,8 +8,10 @@ import {
   onMessageListener,
   initMessaging,
 } from "dev-push-notification";
+import { useNavigate } from "react-router";
 
 const LandingDemo = () => {
+  const navigate=useNavigate();
   const [apiKey, setApiKey] = useState("");
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -64,19 +66,35 @@ const LandingDemo = () => {
       <div className="landing-demo-inner-container">
         <h1>Live Demo</h1>
         <h4>
-          Test the API directly from your browser. Each test requires <b>2 credits</b> (1 for token generation and 1
-          for sending the notification).
+          Test the API directly from your browser. Each test requires{" "}
+          <b>2 credits</b> (1 for token generation and 1 for sending the
+          notification).
         </h4>
         <div className="form-card">
-          <Input
-            label="API Key"
-            value={apiKey}
-            setValue={setApiKey}
-            placeholder="dpn_sk_live_..."
-            type="input"
-            InputType="text"
-            margin="6px 0px 8px 0px"
-          />
+          <div style={{ display: "flex", width: "100%", alignItems: "end" }}>
+            <div style={{ width: "100%" }}>
+              <Input
+                label="API Key"
+                value={apiKey}
+                setValue={setApiKey}
+                placeholder="dpn_sk_live_..."
+                type="input"
+                InputType="text"
+                margin="6px 0px 8px 0px"
+              />
+            </div>
+            <button
+              style={{
+                whiteSpace: "nowrap",
+                margin: "0px 0px 9px 6px",
+                borderRadius: "6px",
+              }}
+              className="landing-page-btn landing-page-btn-primary"
+              onClick={() => navigate("/api-section")}
+            >
+              Get Key
+            </button>
+          </div>
           <Input
             label="Notification Title"
             value={title}

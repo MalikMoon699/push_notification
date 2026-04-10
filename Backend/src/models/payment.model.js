@@ -23,4 +23,5 @@ const paymentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+paymentSchema.index({ user: 1, createdAt: 1 });
 export default mongoose.model("Payment", paymentSchema);

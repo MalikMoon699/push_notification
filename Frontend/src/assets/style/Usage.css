@@ -127,6 +127,7 @@
 .usage-time {
   font-size: 13px;
   color: var(--foreground);
+  white-space: nowrap;
 }
 
 .usage-credit {

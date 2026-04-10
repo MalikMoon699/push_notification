@@ -279,7 +279,11 @@
 /* ======== TopBar Style ============ */
 
 .custom-topbar-container {
-  width: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: -webkit-fill-available;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,6 +291,7 @@
   background: var(--background);
   border-bottom: 1px solid var(--border);
   padding: 23px 12px;
+  opacity: 0.8;
 }
 
 .custom-topbar-inner-container {
@@ -623,3 +628,54 @@
     transform: translateY(0);
   }
 }
+
+/* ===== DashBoard States card ====== */
+.custom-dashboard-stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+
+.custom-dashboard-stat-card {
+  background: var(--card);
+  padding: 20px;
+  min-height: 125px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.034);
+}
+
+.custom-dashboard-stat-card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.custom-dashboard-stat-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.custom-dashboard-stat-value {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.custom-dashboard-stat-icon {
+  height: 50px;
+  width: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradian-background);
+}
+

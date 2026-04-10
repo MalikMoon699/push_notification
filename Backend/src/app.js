@@ -5,6 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 
 import authRoute from "./routes/auth.routes.js";
+import dashAnalyticRoutes from "./routes/dashAnalytics.routes.js";
 import keyRoute from "./routes/apiKey.routes.js";
 import paymentRoute from "./routes/payment.routes.js";
 import sdkRoutes from "./routes/sdk.routes.js";
@@ -29,6 +30,7 @@ app.use("/api/sdk", sdkRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/usage", usageRoutes);
 app.use("/api/rewards", rewardsRoutes);
+app.use("/api/dashAnalytic", dashAnalyticRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Server API");

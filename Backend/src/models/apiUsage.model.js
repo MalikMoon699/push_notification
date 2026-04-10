@@ -13,4 +13,5 @@ const usageSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+usageSchema.index({ user: 1, createdAt: 1 });
 export default mongoose.model("ApiUsage", usageSchema);

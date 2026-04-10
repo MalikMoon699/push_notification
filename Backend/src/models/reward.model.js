@@ -9,4 +9,5 @@ const rewardSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+rewardSchema.index({ user: 1, createdAt: 1 });
 export default mongoose.model("Reward", rewardSchema);

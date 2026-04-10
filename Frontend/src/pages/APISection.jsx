@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../assets/style/APISection.css";
-import { Key, Eye, Copy, Trash2, EyeOff } from "lucide-react";
+import { Key, Eye, Copy, Trash2, EyeOff, FlaskConical } from "lucide-react";
 import {
   CustomCodeSection,
   Input,
@@ -15,8 +15,13 @@ import {
 } from "../services/key.services";
 import Loader from "../components/Loader";
 import { formateDate, timeAgo } from "../utils/helper";
+import { ChartCard } from "../components/ChartsComponents";
+import { apiKeyWeekFallBack } from "../services/chartFallback.services";
+import { getApiRequestCount } from "../services/dashAnalytics.services";
+import { useNavigate } from "react-router";
 
 const APISection = () => {
+  const navigate=useNavigate();
   const [isGen, setIsGen] = useState(false);
   const [usageStates, setUsageStates] = useState(null);
   const [apiKeys, setApiKeys] = useState([]);
@@ -34,11 +39,12 @@ const APISection = () => {
     try {
       setLoading(true);
 
-      const [keysRes, statesRes] = await Promise.all([
+      const [chartRes, keysRes, statesRes] = await Promise.all([
+        getApiRequestCount(),
         getApiKeys(),
         getApiUsageStates({ date: today, month }),
       ]);
-
+      setKeyUsage(chartRes?.data);
       setApiKeys(keysRes?.keys || []);
       setUsageStates(statesRes || 0);
     } catch (err) {
@@ -47,6 +53,9 @@ const APISection = () => {
       setLoading(false);
     }
   };
+
+
+  const weeklyChartData = keyUsage?.length > 0 ? keyUsage : apiKeyWeekFallBack;
 
   return (
     <>
@@ -70,18 +79,12 @@ const APISection = () => {
           <StateTabs title="Rate Limit" value="100 req" maxValue="min" />
         </div>
 
-        <div className="api-keys-section">
-          <div className="api-keys-header">
-            <h3>Usage by Key (This Week)</h3>
-          </div>
-          {loading ? (
-            <Loader style={{ height: "200px" }} />
-          ) : keyUsage?.length > 0 ? (
-            keyUsage.map((key, index) => <div>here add chart</div>)
-          ) : (
-            <p className="empty-data">No Keys usage found.</p>
-          )}
-        </div>
+        <ChartCard
+          title="Api usage weekly"
+          chartType="bar"
+          ChartData={weeklyChartData}
+          loading={loading}
+        />
 
         <div className="api-keys-section">
           <div className="api-keys-header">
@@ -114,6 +117,10 @@ const APISection = () => {
         <div className="api-quickstart">
           <div className="api-quickstart-header">
             <h3>Quick Start</h3>
+            <button onClick={() => navigate("/landing-demo")} className="api-generate-btn">
+              <FlaskConical size={15} />
+              Live test
+            </button>
           </div>
           <CustomCodeSection
             Title="Usage"

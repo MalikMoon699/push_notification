@@ -727,3 +727,27 @@ export const Selector = ({
     </div>
   );
 };
+
+export const StatesCard = ({
+  icon: Icon,
+  iColor = "var(--primary)",
+  title = "",
+  value = "",
+  loading = false,
+}) => {
+  return (
+    <div className="custom-dashboard-stat-card">
+      <div className="custom-dashboard-stat-card-content">
+        <p className="custom-dashboard-stat-title">{title}</p>
+        <h3 className="custom-dashboard-stat-value">
+          {loading ? <Loader size="25" stroke="2" /> : <>{value}</>}
+        </h3>
+      </div>
+      <div
+        className="custom-dashboard-stat-icon"
+      >
+        <Icon color={iColor} />
+      </div>
+    </div>
+  );
+};

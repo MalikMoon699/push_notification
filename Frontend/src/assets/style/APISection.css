@@ -6,6 +6,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  margin-bottom: 30px;
 }
 
 .api-stat-card {
@@ -67,7 +68,7 @@
 
 .api-generate-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 194, 155, 0.3);
+  box-shadow: 0 6px 16px rgba(65, 0, 194, 0.3);
 }
 
 .api-key-card {
