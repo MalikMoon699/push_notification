@@ -1,6 +1,5 @@
 import API from "../utils/api";
 
-
 export const claimDailyRewardHelper = async () => {
   try {
     const res = await API.get("/api/rewards/claim-today-reward");

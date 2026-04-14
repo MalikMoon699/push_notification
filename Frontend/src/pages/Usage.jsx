@@ -6,7 +6,6 @@ import {
   LoadMore,
   SearchInput,
   Selector,
-  StorageSearch,
   TopBar,
 } from "../components/CustomComponents";
 import { formateDateTime } from "../utils/helper";
@@ -128,7 +127,9 @@ const Usage = () => {
             />
           </div>
           <div className="usage-list">
-            {usageDetails?.length > 0 ? (
+            {loading ? (
+              <Loader style={{ height: "50vh" }} />
+            ) : usageDetails?.length > 0 ? (
               usageDetails.map((item) => (
                 <div
                   key={item._id}

@@ -10,6 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import { Gift, TicketCheck, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { limit } from "../utils/constants";
+import Loader from "../components/Loader";
 
 const Rewards = () => {
   const { currentUser } = useAuth();
@@ -90,7 +91,9 @@ const Rewards = () => {
         <div className="reward-history-section">
           <h2 className="reward-history-title">Reward History</h2>
           {loading ? (
-            <p className="reward-loading-text">Loading...</p>
+            <div className="empty-data">
+            <Loader />
+            </div>
           ) : rewards.length === 0 ? (
             <p className="empty-data">No rewards claimed yet.</p>
           ) : (

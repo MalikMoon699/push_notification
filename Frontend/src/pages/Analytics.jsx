@@ -10,7 +10,7 @@ import { Key, Send, TrendingDown, TrendingUp } from "lucide-react";
 import { getAnalyticsData } from "../services/dashAnalytics.services.js";
 
 const Analytics = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [states, setStates] = useState(null);
   const [weeklyData, setWeeklyData] = useState([]);
   const [weeklyApiData, setWeeklyApiData] = useState([]);

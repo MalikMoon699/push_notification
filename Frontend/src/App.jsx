@@ -21,6 +21,18 @@ import Rewards from "./pages/Rewards.jsx";
 import PaymentSuccess from "./components/PaymentSuccess.jsx";
 import Payments from "./pages/Payments.jsx";
 import Settings from "./pages/Settings.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+
+// Admin
+import AdminLayout from "./layout/AdminLayout.jsx";
+import AdminDashBoard from "./pages/Admin/DashBoard.jsx";
+import AdminUsers from "./pages/Admin/Users.jsx";
+import AdminCreditSales from "./pages/Admin/CreditSales.jsx";
+import AdminCreditLogs from "./pages/Admin/CreditLogs.jsx";
+import AdminApiKeys from "./pages/Admin/APIKeys.jsx";
+import AdminSettings from "./pages/Admin/Settings.jsx";
+import PaymentFailed from "./components/PaymentFailed.jsx";
+
 
 const App = () => {
 
@@ -43,11 +55,61 @@ const App = () => {
             </PublicRoute>
           }
         />
+        <Route element={<AdminLayout />}>
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute role={["admin"]}>
+                <AdminDashBoard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute role={["admin"]}>
+                <AdminUsers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/credit-sales"
+            element={
+              <ProtectedRoute role={["admin"]}>
+                <AdminCreditSales />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/credit-logs"
+            element={
+              <ProtectedRoute role={["admin"]}>
+                <AdminCreditLogs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/api-keys"
+            element={
+              <ProtectedRoute role={["admin"]}>
+                <AdminApiKeys />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/settings"
+            element={
+              <ProtectedRoute role={["admin"]}>
+                <AdminSettings />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
         <Route element={<AppLayout />}>
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <DashBoard />
               </ProtectedRoute>
             }
@@ -55,7 +117,7 @@ const App = () => {
           <Route
             path="/analytics"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <Analytics />
               </ProtectedRoute>
             }
@@ -63,7 +125,7 @@ const App = () => {
           <Route
             path="/api-section"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <APISection />
               </ProtectedRoute>
             }
@@ -71,7 +133,7 @@ const App = () => {
           <Route
             path="/usage"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <Usage />
               </ProtectedRoute>
             }
@@ -79,7 +141,7 @@ const App = () => {
           <Route
             path="/rewards"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <Rewards />
               </ProtectedRoute>
             }
@@ -87,8 +149,16 @@ const App = () => {
           <Route
             path="/payment-success"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <PaymentSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payment-failed"
+            element={
+              <ProtectedRoute role={["user"]}>
+                <PaymentFailed />
               </ProtectedRoute>
             }
           />
@@ -96,7 +166,7 @@ const App = () => {
           <Route
             path="/payments"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <Payments />
               </ProtectedRoute>
             }
@@ -104,12 +174,13 @@ const App = () => {
           <Route
             path="/settings"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute role={["user"]}>
                 <Settings />
               </ProtectedRoute>
             }
           />
         </Route>
+
         <Route element={<LandingLayout />}>
           <Route path="/" element={<LandingPage />} />
           <Route path="/landing-docs" element={<LandingDocs />} />
@@ -119,6 +190,7 @@ const App = () => {
           <Route path="/privacy" element={<LandingPrivacy />} />
           <Route path="/terms" element={<LandingTerms />} />
         </Route>
+        <Route path="/404" element={<NotFoundPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

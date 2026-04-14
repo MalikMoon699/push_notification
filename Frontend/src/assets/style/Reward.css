@@ -115,10 +115,6 @@
   font-weight: bold;
 }
 
-.reward-loading-text {
-  text-align: center;
-  color: var(--muted-foreground);
-}
 
 .reward-history-list {
   list-style: none;

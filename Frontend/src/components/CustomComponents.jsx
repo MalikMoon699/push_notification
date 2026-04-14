@@ -755,3 +755,12 @@ export const StatesCard = ({
     </div>
   );
 };
+
+export const Header = ({ title = "", desc = "" }) => {
+  return (
+    <div className="custom-header-container">
+      <h1 className="custom-header-title">{title}</h1>
+      <p className="custom-header-desc">{desc}</p>
+    </div>
+  );
+};

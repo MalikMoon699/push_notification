@@ -113,6 +113,12 @@ body {
   padding: 1.5rem;
 }
 
+.admin-page-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
 /* ------  Charts Style ------ */
 
 .charts-wrapper {

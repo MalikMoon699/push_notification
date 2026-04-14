@@ -33,7 +33,7 @@ export const createCheckoutSection = async (req, res) => {
       },
 
       success_url: `${FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_URL}/payments`,
+      cancel_url: `${FRONTEND_URL}/payment-failed?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     await Payment.create({
@@ -94,6 +94,19 @@ export const verifyPayment = async (req, res) => {
   }
 };
 
+export const markPaymentFailed = async (req, res) => {
+  const { sessionId } = req.body;
+
+  const payment = await Payment.findOne({ stripeSessionId: sessionId });
+
+  if (payment && payment.status === "pending") {
+    payment.status = "failed";
+    await payment.save();
+  }
+
+  res.json({ success: true });
+};
+
 export const getPaymentRecords = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -124,3 +137,4 @@ export const getPaymentRecords = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+

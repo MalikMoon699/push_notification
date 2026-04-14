@@ -44,7 +44,7 @@ const Payments = () => {
 
   return (
     <>
-      <TopBar title={`Payment Records (${total || 0})`} />
+      <TopBar title={`Payment Records ${total > 0 && `(${total})`} `} />
       <div className="page-container">
         <div className="princing-records-list">
           {loading ? (

@@ -4,7 +4,9 @@ import Loader from "../components/Loader";
 import { useEffect } from "react";
 
 export const ProtectedRoute = ({ children, role = [] }) => {
+  const navigate = useNavigate();
   const { authAllow, currentUser, loading } = useAuth();
+
   if (loading)
     return (
       <Loader
@@ -16,10 +18,16 @@ export const ProtectedRoute = ({ children, role = [] }) => {
 
   if (!authAllow) return <Navigate to="/signIn" replace />;
 
+  if (
+    currentUser?.role === "admin" &&
+    window.location.pathname === "/dashboard"
+  ) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
   if (role.length && !role.includes(currentUser.role)) {
     return <Navigate to="/404" replace />;
   }
-
   return children;
 };
 

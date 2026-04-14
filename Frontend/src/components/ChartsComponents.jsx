@@ -26,6 +26,27 @@ const pieColors = [
   "#FFD700",
 ];
 
+const renderYAxisTick = ({ x, y, payload }) => {
+  const value = payload.value;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={4}
+        textAnchor="end"
+        fill="var(--muted-foreground)"
+        style={{
+          fontSize: 12,
+        }}
+      >
+        {value.length > 12 ? value.slice(0, 12) + "..." : value}
+      </text>
+    </g>
+  );
+};
+
 const getNumericKeys = (data) => {
   if (!data?.length) return [];
   return Object.keys(data[0]).filter((key) => typeof data[0][key] === "number");
@@ -47,6 +68,10 @@ export const AreaChart = ({ data, height = 220, width = "100%" }) => {
       fill: "#6c62d558",
     },
     success: {
+      stroke: "var(--status-approved)",
+      fill: "#22c55e48",
+    },
+    NewArrival: {
       stroke: "var(--status-approved)",
       fill: "#22c55e48",
     },
@@ -101,7 +126,10 @@ export const BarChart = ({ data, height = 220, width = "100%" }) => {
     fail: "var(--status-rejected)",
     success: "var(--status-approved)",
     sent: "var(--primary)",
+    ravenue: "var(--status-approved)",
+    credits: "var(--primary)",
   };
+
 
   return (
     <ResponsiveContainer width={width} height={height}>
@@ -238,12 +266,65 @@ export const PieChart = ({ data, height = 220, width = "100%" }) => {
   );
 };
 
+export const BarVerticalChart = ({ data, height = 220, width = "100%" }) => {
+  const xKey = getCategoryKey(data);
+  const keys = getNumericKeys(data);
+
+  const colors = {
+    fail: "var(--status-rejected)",
+    success: "var(--status-approved)",
+    sent: "var(--primary)",
+  };
+
+  return (
+    <ResponsiveContainer width={width} height={height}>
+      <ReBarChart layout="vertical" data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis type="number" />
+        <YAxis
+          type="category"
+          dataKey={xKey}
+          width={100}
+          tick={renderYAxisTick}
+        />
+        <Tooltip
+          cursor={{ fill: "var(--primary-hover)" }}
+          contentStyle={{
+            fontWeight: 600,
+            borderRadius: 12,
+            padding: "12px",
+            background: "var(--card)",
+            color: "var(--card-foreground)",
+            border: "1px solid var(--border)",
+            boxShadow: "0 10px 25px var(--primary-hover)",
+            minWidth: "180px",
+          }}
+        />
+        <Legend />
+
+        {keys.map((key) => (
+          <Bar
+            key={key}
+            radius={[0, 8, 8, 0]}
+            animationDuration={2000}
+            animationBegin={300}
+            dataKey={key}
+            fill={colors[key] || "var(--primary)"}
+          />
+        ))}
+      </ReBarChart>
+    </ResponsiveContainer>
+  );
+};
+
 export const ChartRenderer = ({ data, type, height = 220, width = "100%" }) => {
   switch (type) {
     case "area":
       return <AreaChart data={data} height={height} width={width} />;
     case "bar":
       return <BarChart data={data} height={height} width={width} />;
+    case "v-bar":
+      return <BarVerticalChart data={data} height={height} width={width} />;
     case "pie":
       return <PieChart data={data} height={height} width={width} />;
     default:

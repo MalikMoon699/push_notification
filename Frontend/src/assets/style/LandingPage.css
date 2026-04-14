@@ -443,6 +443,22 @@
   margin-bottom: 20px;
 }
 
+.docs-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 16px;
+  background: var(--card-foreground);
+  color: var(--background);
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.docs-btn:hover {
+  background: var(--muted-foreground);
+}
+
 .landing-docs-sidebar-links {
   display: flex;
   flex-direction: column;

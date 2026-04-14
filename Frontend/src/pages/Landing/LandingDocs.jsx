@@ -85,8 +85,17 @@ useEffect(() => {
           <h2>Introduction</h2>
           <p>
             Dev Push Notification (DPN) is a simple REST API for sending push
-            notifications. Each API call costs 1 credit. You can earn free
-            credits daily or purchase credit packs.
+            notifications.
+            <div className="docs-cta">
+              <a
+                href="https://www.npmjs.com/package/dev-push-notification"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="docs-btn"
+              >
+                📦 View Package on NPM
+              </a>
+            </div>
           </p>
         </section>
 

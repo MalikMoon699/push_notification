@@ -34,6 +34,17 @@ export const handleVerifyHelper = async (sessionId) => {
   }
 };
 
+export const handleFailedHelper = async (sessionId) => {
+  try {
+    const res = await API.post("/api/payment/fail-payment", {
+      sessionId,
+    });
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const getPaymentRecordsHelper = async (page = 1, limit = 20) => {
   try {
     const res = await API.get("/api/payment/payment-records", {

@@ -8,7 +8,7 @@ export const IMAGES = {
   NotFound,
 };
 
-export const SideBarMenu = [
+export const UserSideBarMenu = [
   {
     name: "Dashboard",
     icon: "LayoutDashboard",
@@ -54,4 +54,44 @@ export const SideBarMenu = [
   },
 ];
 
-export const limit = 4;
+
+export const AdminSideBarMenu = [
+  {
+    name: "Dashboard",
+    icon: "LayoutDashboard",
+    route: "/admin/dashboard",
+    activeAt: "/admin/dashboard",
+  },
+  {
+    name: "Users",
+    icon: "Users",
+    route: "/admin/users",
+    activeAt: "/admin/users",
+  },
+  {
+    name: "Credit Sales",
+    icon: "Coins",
+    route: "/admin/credit-sales",
+    activeAt: "/admin/credit-sales",
+  },
+  {
+    name: "Credit Logs",
+    icon: "ScrollText",
+    route: "/admin/credit-logs",
+    activeAt: "/admin/credit-logs",
+  },
+  {
+    name: "API Keys",
+    icon: "Key",
+    route: "/admin/api-keys",
+    activeAt: "/admin/api-keys",
+  },
+  {
+    name: "Settings",
+    icon: "Settings",
+    route: "/admin/settings",
+    activeAt: "/admin/settings",
+  },
+];
+
+export const limit = 1;

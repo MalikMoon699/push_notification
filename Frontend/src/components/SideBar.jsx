@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import "../assets/style/SideBar.css";
-import { IMAGES, SideBarMenu } from "../utils/constants";
+import { IMAGES, UserSideBarMenu, AdminSideBarMenu } from "../utils/constants";
 import { useLocation, useNavigate } from "react-router";
 import LogoutModel from "../auth/LogoutModel";
+import { useAuth } from "../context/AuthContext";
 
 const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {currentUser}=useAuth();
   const [isSideBar, setIsSideBar] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
   const sidebarRef = useRef();
@@ -25,6 +27,9 @@ const SideBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setIsSideBar]);
+
+  const SideBarMenu =
+    currentUser?.role === "admin" ? AdminSideBarMenu : UserSideBarMenu;
 
   return (
     <>
