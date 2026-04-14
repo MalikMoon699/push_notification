@@ -94,4 +94,4 @@ export const AdminSideBarMenu = [
   },
 ];
 
-export const limit = 1;
+export const limit = 10;
