@@ -33,167 +33,163 @@ import AdminApiKeys from "./pages/Admin/APIKeys.jsx";
 import AdminSettings from "./pages/Admin/Settings.jsx";
 import PaymentFailed from "./components/PaymentFailed.jsx";
 
-
 const App = () => {
-
   return (
-    <>
-      <Routes>
+    <Routes>
+      <Route
+        path="/signin"
+        element={
+          <PublicRoute>
+            <SignIn />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <PublicRoute>
+            <SignUp />
+          </PublicRoute>
+        }
+      />
+      <Route element={<AdminLayout />}>
         <Route
-          path="/signin"
+          path="/admin/dashboard"
           element={
-            <PublicRoute>
-              <SignIn />
-            </PublicRoute>
+            <ProtectedRoute role={["admin"]}>
+              <AdminDashBoard />
+            </ProtectedRoute>
           }
         />
         <Route
-          path="/signup"
+          path="/admin/users"
           element={
-            <PublicRoute>
-              <SignUp />
-            </PublicRoute>
+            <ProtectedRoute role={["admin"]}>
+              <AdminUsers />
+            </ProtectedRoute>
           }
         />
-        <Route element={<AdminLayout />}>
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute role={["admin"]}>
-                <AdminDashBoard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute role={["admin"]}>
-                <AdminUsers />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/credit-sales"
-            element={
-              <ProtectedRoute role={["admin"]}>
-                <AdminCreditSales />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/credit-logs"
-            element={
-              <ProtectedRoute role={["admin"]}>
-                <AdminCreditLogs />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/api-keys"
-            element={
-              <ProtectedRoute role={["admin"]}>
-                <AdminApiKeys />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/settings"
-            element={
-              <ProtectedRoute role={["admin"]}>
-                <AdminSettings />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-        <Route element={<AppLayout />}>
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <DashBoard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/analytics"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <Analytics />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/api-section"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <APISection />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/usage"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <Usage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/rewards"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <Rewards />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/payment-success"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <PaymentSuccess />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/payment-failed"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <PaymentFailed />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/admin/credit-sales"
+          element={
+            <ProtectedRoute role={["admin"]}>
+              <AdminCreditSales />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/credit-logs"
+          element={
+            <ProtectedRoute role={["admin"]}>
+              <AdminCreditLogs />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/api-keys"
+          element={
+            <ProtectedRoute role={["admin"]}>
+              <AdminApiKeys />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute role={["admin"]}>
+              <AdminSettings />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
+      <Route element={<AppLayout />}>
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <DashBoard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <Analytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/api-section"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <APISection />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usage"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <Usage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/rewards"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <Rewards />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment-success"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <PaymentSuccess />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment-failed"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <PaymentFailed />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/payments"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <Payments />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute role={["user"]}>
-                <Settings />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
+        <Route
+          path="/payments"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <Payments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute role={["user"]}>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
 
-        <Route element={<LandingLayout />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/landing-docs" element={<LandingDocs />} />
-          <Route path="/landing-demo" element={<LandingDemo />} />
-          <Route path="/contact" element={<LandingContact />} />
-          <Route path="/careers" element={<LandingCareers />} />
-          <Route path="/privacy" element={<LandingPrivacy />} />
-          <Route path="/terms" element={<LandingTerms />} />
-        </Route>
-        <Route path="/404" element={<NotFoundPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </>
+      <Route element={<LandingLayout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/landing-docs" element={<LandingDocs />} />
+        <Route path="/landing-demo" element={<LandingDemo />} />
+        <Route path="/contact" element={<LandingContact />} />
+        <Route path="/careers" element={<LandingCareers />} />
+        <Route path="/privacy" element={<LandingPrivacy />} />
+        <Route path="/terms" element={<LandingTerms />} />
+      </Route>
+      <Route path="/404" element={<NotFoundPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 

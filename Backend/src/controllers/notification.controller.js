@@ -119,7 +119,7 @@ export const getFcmTokkenByCredits = async (req, res) => {
 };
 
 export const sendNotificationByCredits = async (req, res) => {
-  const { title, body, fcmTokens, icon } = req.body;
+  const { title, body, fcmTokens, icon, link } = req.body;
   const user = req.user;
   const apiKey = req.apiKey;
 
@@ -169,6 +169,7 @@ export const sendNotificationByCredits = async (req, res) => {
           .send({
             token,
             notification: { title, body, image: icon },
+            data: { clickUrl: link || "/" },
           })
           .then(() => ({ success: true }))
           .catch((err) => ({ error: err.message })),
@@ -218,3 +219,104 @@ export const sendNotificationByCredits = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// export const sendNotificationByCredits = async (req, res) => {
+//   const { title, body, fcmTokens, icon } = req.body;
+//   const user = req.user;
+//   const apiKey = req.apiKey;
+
+//   if (!fcmTokens || fcmTokens.length === 0) {
+//     await logApiUsage({
+//       apiKeyId: apiKey?._id,
+//       userId: user?._id,
+//       title:"send notification",
+//       useCase: "FCM tokens missing",
+//       success: false,
+//     });
+
+//     return res.status(400).json({ error: "FCM tokens required" });
+//   }
+
+//   try {
+//     if (!user) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+
+//     const uniqueTokens = [...new Set(fcmTokens)];
+//     let tokensToSend = uniqueTokens;
+
+//     if (user.accountType === "basicUser") {
+//       if (user.credits <= 0) {
+//         await logApiUsage({
+//           apiKeyId: apiKey._id,
+//           userId: user._id,
+//           title: "send notification",
+//           useCase: "Not enough credits to send notification",
+//           success: false,
+//         });
+
+//         return res.status(403).json({
+//           success: false,
+//           message: "Not enough credits to send notification",
+//         });
+//       }
+
+//       tokensToSend = uniqueTokens.slice(0, user.credits);
+//     }
+
+//     const results = await Promise.all(
+//       tokensToSend.map((token) =>
+//         admin
+//           .messaging()
+//           .send({
+//             token,
+//             notification: { title, body, image: icon },
+//           })
+//           .then(() => ({ success: true }))
+//           .catch((err) => ({ error: err.message })),
+//       ),
+//     );
+
+//     const successCount = results.filter((r) => r.success).length;
+//     const failureCount = results.filter((r) => r.error).length;
+
+//     let creditsUsed = 0;
+
+//     if (user.accountType === "basicUser") {
+//       creditsUsed = successCount;
+//       user.credits -= creditsUsed;
+//       await user.save();
+//     }
+
+//     await logApiUsage({
+//       apiKeyId: apiKey._id,
+//       userId: user._id,
+//       title: "send notification",
+//       useCase: `Notification sent: ${successCount} success, ${failureCount} failed`,
+//       success: successCount > 0,
+//     });
+
+//     return res.json({
+//       success: true,
+//       totalRequested: uniqueTokens.length,
+//       totalSent: tokensToSend.length,
+//       successCount,
+//       failureCount,
+//       creditsUsed,
+//       remainingCredits:
+//         user.accountType === "basicUser" ? user.credits : "unlimited",
+//       results,
+//     });
+//   } catch (err) {
+//     await logApiUsage({
+//       apiKeyId: apiKey?._id,
+//       userId: user?._id,
+//       title: "send notification",
+//       useCase: "Error while sending notification",
+//       success: false,
+//     });
+
+//     console.error("Notification Error:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };

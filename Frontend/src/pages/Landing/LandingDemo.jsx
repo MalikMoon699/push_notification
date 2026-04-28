@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router";
 
 const LandingDemo = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [apiKey, setApiKey] = useState("");
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -21,12 +21,17 @@ const LandingDemo = () => {
 
   useEffect(() => {
     initMessaging(API_KEY);
-    const unsubscribe = onMessageListener((payload) => {
-      if (Notification.permission === "granted" && payload.notification) {
-        const { title, body, image } = payload.notification;
-        new Notification(title, { body, icon: image });
-      }
-    }, API_KEY);
+    const unsubscribe = onMessageListener(async (payload) => {
+      console.log("Foreground notification received:", payload);
+      const { title, body, image } = payload.notification;
+      const link = payload.data?.clickUrl || "/";
+      const registration = await navigator.serviceWorker.ready;
+      registration.showNotification(title, {
+        body,
+        icon: image,
+        data: { clickUrl: link },
+      });
+    }, Push_Notification_Api);
 
     return () => unsubscribe();
   }, []);

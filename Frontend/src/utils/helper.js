@@ -92,4 +92,3 @@ export const handleUploadImage = async (avatarFile) => {
     console.error("Failed to Upload Image:", err);
   }
 };
-
