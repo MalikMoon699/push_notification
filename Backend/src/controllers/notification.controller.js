@@ -1,5 +1,6 @@
 import admin from "../utils/firebaseAdmin.js";
 import { logApiUsage } from "../services/logApiUsage.js";
+import mailer from "../config/mailer.js";
 
 export const getFcmTokken = async (req, res) => {
   try {
@@ -62,7 +63,7 @@ export const getFcmTokkenByCredits = async (req, res) => {
       await logApiUsage({
         apiKeyId: apiKey._id,
         userId: user._id,
-        title:"generate token",
+        title: "generate token",
         useCase: `Device token generated: ${token}`,
         success: true,
       });
@@ -127,7 +128,7 @@ export const sendNotificationByCredits = async (req, res) => {
     await logApiUsage({
       apiKeyId: apiKey?._id,
       userId: user?._id,
-      title:"send notification",
+      title: "send notification",
       useCase: "FCM tokens missing",
       success: false,
     });
@@ -220,103 +221,107 @@ export const sendNotificationByCredits = async (req, res) => {
   }
 };
 
-// export const sendNotificationByCredits = async (req, res) => {
-//   const { title, body, fcmTokens, icon } = req.body;
-//   const user = req.user;
-//   const apiKey = req.apiKey;
+export const sendMailPush = async (req, res) => {
+  const user = req.user;
+  const apiKey = req.apiKey;
 
-//   if (!fcmTokens || fcmTokens.length === 0) {
-//     await logApiUsage({
-//       apiKeyId: apiKey?._id,
-//       userId: user?._id,
-//       title:"send notification",
-//       useCase: "FCM tokens missing",
-//       success: false,
-//     });
+  try {
+    const { from, mails, subject, htmlContent } = req.body;
 
-//     return res.status(400).json({ error: "FCM tokens required" });
-//   }
+    if (!from || !mails || !subject || !htmlContent) {
+      await logApiUsage({
+        apiKeyId: apiKey?._id,
+        userId: user?._id,
+        title: "send email",
+        useCase: "Missing email data",
+        success: false,
+      });
 
-//   try {
-//     if (!user) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
+      return res.status(400).json({
+        success: false,
+        message: "Missing email data",
+      });
+    }
 
-//     const uniqueTokens = [...new Set(fcmTokens)];
-//     let tokensToSend = uniqueTokens;
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-//     if (user.accountType === "basicUser") {
-//       if (user.credits <= 0) {
-//         await logApiUsage({
-//           apiKeyId: apiKey._id,
-//           userId: user._id,
-//           title: "send notification",
-//           useCase: "Not enough credits to send notification",
-//           success: false,
-//         });
+    const emailList = Array.isArray(mails) ? mails : [mails];
+    const emailCount = emailList.length;
 
-//         return res.status(403).json({
-//           success: false,
-//           message: "Not enough credits to send notification",
-//         });
-//       }
+    let creditsUsed = 0;
 
-//       tokensToSend = uniqueTokens.slice(0, user.credits);
-//     }
+    if (user.accountType === "basicUser") {
+      if (user.credits <= 0) {
+        await logApiUsage({
+          apiKeyId: apiKey._id,
+          userId: user._id,
+          title: "send email",
+          useCase: "Not enough credits to send email",
+          success: false,
+        });
 
-//     const results = await Promise.all(
-//       tokensToSend.map((token) =>
-//         admin
-//           .messaging()
-//           .send({
-//             token,
-//             notification: { title, body, image: icon },
-//           })
-//           .then(() => ({ success: true }))
-//           .catch((err) => ({ error: err.message })),
-//       ),
-//     );
+        return res.status(403).json({
+          success: false,
+          message: "Not enough credits to send email",
+        });
+      }
 
-//     const successCount = results.filter((r) => r.success).length;
-//     const failureCount = results.filter((r) => r.error).length;
+      if (user.credits < emailCount) {
+        return res.status(403).json({
+          success: false,
+          message: `You need ${emailCount} credits but only have ${user.credits}`,
+        });
+      }
 
-//     let creditsUsed = 0;
+      creditsUsed = emailCount;
+    }
 
-//     if (user.accountType === "basicUser") {
-//       creditsUsed = successCount;
-//       user.credits -= creditsUsed;
-//       await user.save();
-//     }
+    await mailer.sendMail({
+      from: `"${from}" <${process.env.EMAIL_USER}>`,
+      to: emailList,
+      subject,
+      html: htmlContent,
+    });
 
-//     await logApiUsage({
-//       apiKeyId: apiKey._id,
-//       userId: user._id,
-//       title: "send notification",
-//       useCase: `Notification sent: ${successCount} success, ${failureCount} failed`,
-//       success: successCount > 0,
-//     });
+    if (user.accountType === "basicUser") {
+      user.credits -= creditsUsed;
+      await user.save();
+    }
 
-//     return res.json({
-//       success: true,
-//       totalRequested: uniqueTokens.length,
-//       totalSent: tokensToSend.length,
-//       successCount,
-//       failureCount,
-//       creditsUsed,
-//       remainingCredits:
-//         user.accountType === "basicUser" ? user.credits : "unlimited",
-//       results,
-//     });
-//   } catch (err) {
-//     await logApiUsage({
-//       apiKeyId: apiKey?._id,
-//       userId: user?._id,
-//       title: "send notification",
-//       useCase: "Error while sending notification",
-//       success: false,
-//     });
+    await logApiUsage({
+      apiKeyId: apiKey._id,
+      userId: user._id,
+      title: "send email",
+      useCase: `Email sent to ${emailCount} recipient(s)`,
+      success: true,
+    });
 
-//     console.error("Notification Error:", err);
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+    return res.status(201).json({
+      success: true,
+      message: "Email successfully sent",
+      creditsUsed,
+      remainingCredits:
+        user.accountType === "premiumUser" ? "unlimited" : user.credits,
+    });
+  } catch (error) {
+    await logApiUsage({
+      apiKeyId: apiKey?._id,
+      userId: user?._id,
+      title: "send email",
+      useCase: "Error while sending email",
+      success: false,
+    });
+
+    console.error("❌ Error sending mail:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Server error",
+    });
+  }
+};

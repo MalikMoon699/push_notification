@@ -18,4 +18,8 @@ export const {
   JWT_SECRET,
   FRONTEND_URL,
   STRIPE_SECRET_KEY,
+  EMAIL_HOST,
+  EMAIL_PORT,
+  EMAIL_USER,
+  EMAIL_PASS,
 } = process.env;
