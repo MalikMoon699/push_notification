@@ -22,20 +22,19 @@ const LandingDemo = () => {
   useEffect(() => {
     initMessaging(API_KEY);
     const unsubscribe = onMessageListener(async (payload) => {
-      console.log("Foreground notification received:", payload);
-      const { title, body, image } = payload.notification;
-      const link = payload.data?.clickUrl || "/";
+      const { title, body, image, clickUrl } = payload.data || {};
       const registration = await navigator.serviceWorker.ready;
       registration.showNotification(title, {
         body,
         icon: image,
-        data: { clickUrl: link },
+        badge: image,
+        data: {
+          clickUrl,
+        },
       });
-    }, Push_Notification_Api);
-
+    });
     return () => unsubscribe();
   }, []);
-
   const handleSendNotification = async () => {
     if (apiKey.trim() === "") return toast.error("Api Key is required!");
     else if (title.trim() === "") return toast.error("Title is required!");

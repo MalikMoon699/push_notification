@@ -171,6 +171,7 @@ await sendNotification({
   title: 'Hello World!',
   body: 'Your first push notification',
   icon: "https://dev-push-notification.vercel.app/SiteIcon.png",
+  link: "https://yourapp.com",
   fcmTokens: [token],
 });`}
           />

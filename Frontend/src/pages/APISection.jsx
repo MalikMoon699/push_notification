@@ -138,6 +138,7 @@ await sendNotification({
   title: "Hello",
   body: "This is a test push notification",
   icon: "https://example.com/icon.png",
+  link: "https://example.com",
   fcmTokens: [token],
 });
 

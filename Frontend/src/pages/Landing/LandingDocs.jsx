@@ -139,17 +139,18 @@ importScripts(
   "https://www.gstatic.com/firebasejs/10.3.0/firebase-messaging-compat.js",
 );
 
-const decodeConfig = (encoded) => {
-  return atob(encoded);
-};
+const API_LINK = "https://buddy-space.vercel.app";
+
+const decodeConfig = (encoded) => atob(encoded);
 
 const encodeConfig = {
-  apiKey: "YOUR_ENCODED_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "QUl6YVN5QWJkTXZLcWx0dV9tTjRtUHJQVUstTVlJTEZsSjhudW04",
+  authDomain: "cHVzaG5vdGlmaWNhdGlvbi1hOTkwNS5maXJlYmFzZWFwcC5jb20=",
+  projectId: "cHVzaG5vdGlmaWNhdGlvbi1hOTkwNQ==",
+  storageBucket: "cHVzaG5vdGlmaWNhdGlvbi1hOTkwNS5maXJlYmFzZXN0b3JhZ2UuYXBw",
+  messagingSenderId: "NzkyMjkyNDUxOTU5",
+  appId: "MTo3OTIyOTI0NTE5NTk6d2ViOjQ4ZGM5OGU0ODA0YzIwMGE5ZWM4NzI=",
+  measurementId: "Ry0wNTMwQ1NMOUw5TA==",
 };
 
 firebase.initializeApp({
@@ -159,19 +160,63 @@ firebase.initializeApp({
   storageBucket: decodeConfig(encodeConfig.storageBucket),
   messagingSenderId: decodeConfig(encodeConfig.messagingSenderId),
   appId: decodeConfig(encodeConfig.appId),
+  measurementId: decodeConfig(encodeConfig.measurementId),
 });
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function (payload) {
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon,
-  };
+messaging.onBackgroundMessage((payload) => {
+  console.log("Background message:", payload);
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});`}
+  const {
+    title = "Notification",
+    body = "",
+    image = "",
+    clickUrl = "/",
+  } = payload.data || {};
+
+  self.registration.showNotification(title, {
+    body,
+    icon: image,
+    badge: image,
+    data: {
+      clickUrl,
+    },
+  });
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  let clickUrl = event.notification.data?.clickUrl || "/";
+
+  if (!clickUrl.startsWith("http")) {
+    clickUrl = new URL(clickUrl, API_LINK).href;
+  }
+
+  event.waitUntil(
+    clients
+      .matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      })
+      .then((windowClients) => {
+        for (const client of windowClients) {
+          if (client.url === clickUrl && "focus" in client) {
+            return client.focus();
+          }
+        }
+
+        return clients.openWindow(clickUrl);
+      })
+      .catch((err) => {
+        console.error("Notification click error:", err);
+
+        return clients.openWindow(API_LINK);
+      }),
+  );
+});
+`}
           />
         </section>
 
@@ -199,22 +244,22 @@ messaging.onBackgroundMessage(function (payload) {
 
           <CustomCodeSection
             Title="init.js"
-            codeBody={`useEffect(() => {
-  initMessaging(API_KEY);
-
-  const unsubscribe = onMessageListener((payload) => {
-    if (Notification.permission === "granted" && payload.notification) {
-      const { title, body, image } = payload.notification;
-
-      new Notification(title, {
+            codeBody={`  useEffect(() => {
+    initMessaging(API_KEY);
+    const unsubscribe = onMessageListener(async (payload) => {
+      const { title, body, image, clickUrl } = payload.data || {};
+      const registration = await navigator.serviceWorker.ready;
+      registration.showNotification(title, {
         body,
         icon: image,
+        badge: image,
+        data: {
+          clickUrl,
+        },
       });
-    }
-  }, API_KEY);
-
-  return () => unsubscribe();
-}, []);`}
+    });
+    return () => unsubscribe();
+  }, []);`}
           />
         </section>
 
@@ -238,6 +283,7 @@ console.log("Device Token:", token);`}
   title: "Hello",
   body: "This is a test push notification",
   icon: "https://example.com/icon.png",
+  link: "https://example.com",
   fcmTokens: [token],
 });`}
           />
